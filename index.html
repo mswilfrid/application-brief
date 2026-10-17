@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Applicant Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: form column on the left, live brief that sticks beside it; phone stacks them with a copy bar pinned to the bottom. */
+:root{
+  --bg:#EEF2F4; --surface:#FFFFFF; --field:#F6F8F9; --ink:#15212B; --muted:#586775;
+  --line:#D3DBE1; --accent:#0B6E8A; --accent-ink:#FFFFFF; --accent-soft:#DCEEF3; --ok:#1B7F4B;
+  --display:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif;
+  --body:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C141A; --surface:#141F27; --field:#0F1A21; --ink:#E4ECF1; --muted:#93A3B0;
+    --line:#26343F; --accent:#4DBAD6; --accent-ink:#06222B; --accent-soft:#12303B; --ok:#5CCB8E; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C141A; --surface:#141F27; --field:#0F1A21; --ink:#E4ECF1; --muted:#93A3B0;
+  --line:#26343F; --accent:#4DBAD6; --accent-ink:#06222B; --accent-soft:#12303B; --ok:#5CCB8E; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 40px}
+.wrap{max-width:1160px;margin:0 auto}
+header{display:grid;gap:10px;margin-bottom:24px;max-width:720px}
+h1{font:700 clamp(30px,5vw,44px)/1.05 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.lede{margin:0;color:var(--muted);font-size:16px;max-width:60ch}
+.priv{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);border:1px solid var(--line);background:var(--surface);padding:6px 10px;width:fit-content;max-width:100%}
+.priv b{color:var(--ok);font-weight:600}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,430px);gap:24px;align-items:start}
+.form{display:grid;gap:16px;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);padding:20px;display:grid;gap:14px;min-width:0}
+.card h2{font:600 19px/1.2 var(--display);margin:0;letter-spacing:-.01em}
+.card .note{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.fld{display:grid;gap:5px;min-width:0;align-content:start}
+.full{grid-column:1/-1}
+label{font-size:13px;font-weight:500}
+.opt{color:var(--muted);font-weight:400}
+input[type=text],select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);padding:9px 10px;border-radius:3px}
+textarea{resize:vertical;min-height:64px}
+input::placeholder,textarea::placeholder{color:var(--muted);opacity:.75}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.rows{display:grid;gap:12px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end;padding:12px;border:1px dashed var(--line)}
+.row .wide{grid-column:1/-1}
+button{font:inherit;cursor:pointer;border-radius:3px}
+.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);padding:7px 10px;font-size:13px}
+.ghost:hover{color:var(--ink);border-color:var(--muted)}
+.add{justify-self:start;background:var(--accent-soft);color:var(--accent);border:1px solid transparent;padding:8px 12px;font-weight:500;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.chip span{display:block;padding:7px 12px;border:1px solid var(--line);background:var(--field);font-size:14px}
+.chip input:checked + span{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.checks{display:grid;gap:8px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;font-weight:400}
+.check input{margin-top:4px;accent-color:var(--accent)}
+aside{position:sticky;top:16px;display:grid;gap:12px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);display:grid;grid-template-rows:auto auto minmax(0,1fr);min-width:0;max-height:calc(100vh - 40px)}
+.phead{padding:14px 16px;display:grid;gap:10px;border-bottom:1px solid var(--line)}
+.ptitle{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.ptitle h2{font:600 17px/1.2 var(--display);margin:0}
+.tag{font-size:12px;color:var(--accent);background:var(--accent-soft);padding:2px 8px;font-weight:500}
+.meter{display:grid;gap:5px;font-size:13px;color:var(--muted)}
+.bar{height:6px;background:var(--field);border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .25s}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.primary{background:var(--accent);color:var(--accent-ink);border:0;padding:10px 16px;font-weight:600}
+.primary:hover{filter:brightness(1.08)}
+.tools .check{font-size:13.5px;margin-left:auto}
+pre{margin:0;padding:16px;font:12.5px/1.55 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;overflow:auto;min-height:0}
+.clear{justify-self:start}
+.bottombar{display:none}
+@media (max-width:960px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  aside{position:static}
+  .panel{max-height:none}
+  pre{max-height:60vh}
+  .bottombar{display:flex;align-items:center;gap:12px;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+  .bottombar .count{font-size:13px;color:var(--muted);flex:1;min-width:0}
+  body{padding-bottom:96px}
+}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Applicant Brief</h1>
+    <p class="lede">Fill in your profile once, then paste the result into any AI before you ask it to research universities or your chances. The more complete it is, the less the AI has to guess.</p>
+    <div class="priv"><b>Private.</b> Your answers stay in this browser and are not sent anywhere. Leave out passport numbers, addresses and phone numbers.</div>
+  </header>
+
+  <div class="grid">
+    <form class="form" id="form" onsubmit="return false" autocomplete="off"></form>
+
+    <aside>
+      <div class="panel">
+        <div class="phead">
+          <div class="ptitle"><h2>Your brief</h2><span class="tag" id="exTag">Example, replaced as you type</span></div>
+          <div class="meter"><span id="meterText"></span><div class="bar"><i id="meterBar"></i></div></div>
+        </div>
+        <div class="tools">
+          <button type="button" class="primary" id="copyBtn">Copy brief</button>
+          <label class="check"><input type="checkbox" id="instrBox"> Include instructions for the AI</label>
+        </div>
+        <pre id="out" tabindex="0" aria-label="Brief to paste into an AI"></pre>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="bottombar">
+  <span class="count" id="barCount"></span>
+  <button type="button" class="primary" id="copyBtn2">Copy brief</button>
+</div>
+
+<script>
+(function(){
+  var KEY='applicant-brief-v1';
+
+  var INSTR = [
+    'You are helping me research universities and my realistic chances of admission. Treat the profile below as the only facts you have about me.',
+    '',
+    'Rules:',
+    '1. If something missing from the profile would change your answer, ask me first. Otherwise state your assumption.',
+    '2. For SAT/ACT policy, English-test minimums (including the Duolingo English Test), deadlines and financial aid for international students, check each school\'s official admissions pages for my intake year and give the link. Mark anything you could not confirm as "not verified". Do not fill gaps from memory.',
+    '3. Give my chances as a range with the reasons behind it (strengths and weak spots), never as a promise. Acceptance rates for international applicants are usually lower than the headline rate.',
+    '4. Label each school Reach, Target or Safety, and flag any school I probably cannot afford on my budget.',
+    '5. Keep answers short and end with the next steps in order.'
+  ].join('\n');
+
+  var SECTIONS = [
+    {id:'about', title:'About you', note:'The basics that decide which rules apply to you.', fields:[
+      {k:'name', l:'Name or nickname', ph:'First name is enough', opt:1},
+      {k:'country', l:'Country you live in', ph:'e.g. Rwanda', key:'Country'},
+      {k:'citizen', l:'Citizenship', ph:'e.g. Rwandan, plus a second one if you have it', key:'Citizenship'},
+      {k:'entry', l:'Intended start', ph:'e.g. Fall 2027', key:'Intended start'},
+      {k:'major', l:'Intended major', ph:'e.g. Mathematics with a CS minor', key:'Intended major'},
+      {k:'goal', l:'Career goal', t:'area', full:1, ph:'e.g. Quant at a bank or fund, then my own firm', key:'Career goal'}
+    ]},
+    {id:'academics', title:'Academics', note:'Use the grades you actually have, with the grading context an outsider needs.', fields:[
+      {k:'system', l:'Curriculum or national exam', ph:'Choose or type', list:['NESA (Rwanda)','A-levels','IB Diploma','AP / US high school','IGCSE','WASSCE','KCSE','Other national exam'], key:'Curriculum or exam'},
+      {k:'overall', l:'Overall result', ph:'e.g. 95% average, top 3 in class', key:'Overall result'},
+      {k:'scale', l:'Grading context', t:'area', full:1, ph:'How your school or exam board grades, class rank, school size, anything that makes your grades hard to compare'}
+    ], rows:{name:'subjects', title:'Subjects and results', add:'Add subject', key:'At least one subject', cols:[
+      {k:'s', l:'Subject', ph:'Advanced Mathematics'},
+      {k:'lv', l:'Level', ph:'A-level, HL, AP'},
+      {k:'r', l:'Result', ph:'100%'}
+    ]}, after:[
+      {k:'math', l:'Highest math or science content covered', t:'area', full:1, ph:'e.g. Linear algebra: eigenvalues, diagonalization; proof by induction'},
+      {k:'trend', l:'Grade trend', t:'area', full:1, ph:'Any dip or climb and why'}
+    ]},
+    {id:'tests', title:'Tests and English', note:'Say what you have taken, what you plan to take, and what schools have already told you.', fields:[
+      {k:'sat', l:'SAT or ACT', t:'select', o:['','Not planned','Planning to take','Taken'], key:'SAT/ACT status'},
+      {k:'satScore', l:'SAT/ACT score or target', ph:'e.g. SAT 1520 or target 1500+'},
+      {k:'eng', l:'English test', t:'select', o:['','None yet','Duolingo English Test','IELTS','TOEFL iBT','Other'], key:'English test status'},
+      {k:'engScore', l:'English score or target', ph:'e.g. DET 125 or IELTS 7.0 target'},
+      {k:'moi', l:'Language of instruction and waivers', t:'area', full:1, ph:'Years you studied in English, and whether any school accepted or rejected a waiver letter'},
+      {k:'ap', l:'AP, IB or A-level subjects taken or predicted', ph:'e.g. IB HL Math 7 predicted'},
+      {k:'otherTests', l:'Other tests', ph:'e.g. TMUA, STEP, Olympiads'}
+    ]},
+    {id:'activities', title:'Activities and achievements', note:'Leadership, projects, work and businesses. Say what changed because of you.', rows:{name:'activities', title:'Activities', add:'Add activity', key:'At least one activity', cols:[
+      {k:'n', l:'Activity', ph:'Science Club'},
+      {k:'role', l:'Your role', ph:'Founder, head of CS'},
+      {k:'yrs', l:'Years and hours per week', ph:'3 years, 4 hrs/week'},
+      {k:'imp', l:'What you did and what changed', area:1, cls:'wide', ph:'Concrete numbers help: members, money, users, results'}
+    ]}, after:[
+      {k:'awards', l:'Awards and certificates', t:'area', full:1, ph:'Competitions, rankings, certificates'},
+      {k:'projects', l:'Projects, research or work', t:'area', full:1, ph:'Apps built, businesses started, jobs held'}
+    ]},
+    {id:'story', title:'Recommenders and essays', note:'Strong letters and a clear story separate similar applicants.', fields:[
+      {k:'recs', l:'Recommenders', t:'area', full:1, ph:'Who they are, how long they have taught you, and what their letter will stress'},
+      {k:'essay', l:'Essay material', t:'area', full:1, ph:'Turning points, failures that taught you something, things only you could write about'}
+    ]},
+    {id:'money', title:'Money', note:'Many US schools give international students little or no aid, so this changes the whole list.', fields:[
+      {k:'budget', l:'Most your family can pay per year, all costs, in USD', ph:'e.g. 10,000', key:'Yearly budget'},
+      {k:'aid', l:'Financial aid need', t:'select', o:['','Need full aid, cannot pay','Need substantial aid','Can pay part','Can pay in full'], key:'Aid need'},
+      {k:'merit', l:'Merit scholarships', t:'select', o:['','Essential','Helpful','Not needed']},
+      {k:'transfer', l:'Open to starting at a community college and transferring?', t:'select', o:['','Yes','Maybe','No']}
+    ]},
+    {id:'prefs', title:'Preferences and progress', note:'What you want, and what you have already done.', chips:true, fields:[
+      {k:'matters', l:'What matters most', t:'area', full:1, ph:'e.g. recruiting pipeline to banks, alumni network, co-op, cost'},
+      {k:'dealbreak', l:'Deal-breakers', t:'area', ph:'e.g. no school without aid for internationals'},
+      {k:'considering', l:'Schools already on your list', t:'area', ph:'One per line'},
+      {k:'status', l:'Applications submitted and deadlines you are working to', t:'area', full:1, ph:'e.g. Cornell RD submitted, others due Nov 1'}
+    ]},
+    {id:'context', title:'Context', note:'Anything an admissions officer would need to understand your file.', fields:[
+      {k:'context', l:'Setbacks, responsibilities, limited resources', t:'area', full:1, ph:'e.g. no advanced courses offered at school, family duties, a bad year and the recovery'}
+    ]}
+  ];
+
+  var REGIONS = ['United States','Canada','United Kingdom','Europe','Asia','Africa','Australia','Anywhere'];
+  var ASKS = [
+    ['list','Build a reach, target and safety list for me'],
+    ['tests','Check SAT/ACT and English-test rules for each school, with minimum scores'],
+    ['chances','Estimate my chances at each school and explain what drives them'],
+    ['aid','Check financial aid and scholarships for international students against my budget'],
+    ['compare','Compare programs, recruiting pipelines and alumni networks for my career goal'],
+    ['plan','Give me a deadline and to-do timeline'],
+    ['essay','Suggest essay angles from my background']
+  ];
+
+  var EXAMPLE = {
+    f:{name:'Ama', country:'Ghana', citizen:'Ghanaian', entry:'Fall 2027', major:'Mathematics, CS minor', goal:'Quantitative trader at a market maker', system:'WASSCE', overall:'8 A1s, top of a class of 140', scale:'Grades are strict; top results are rare at my school', math:'Calculus, matrices, sequences and series', sat:'Planning to take', satScore:'Target 1500+', eng:'Duolingo English Test', engScore:'Target 125', moi:'English-medium school for 12 years', budget:'8,000', aid:'Need substantial aid', merit:'Essential', transfer:'Maybe', matters:'Recruiting pipeline to trading firms, aid for internationals', considering:'Princeton\nUniversity of Toronto', awards:'National math olympiad, 2nd place', projects:'Built a probability simulator in Python'},
+    subjects:[{s:'Core Mathematics', lv:'WASSCE', r:'A1'},{s:'Physics', lv:'WASSCE', r:'A1'}],
+    activities:[{n:'Math Club', role:'Founder and president', yrs:'3 years, 3 hrs/week', imp:'Grew from 4 to 40 members and ran weekly problem sessions'}],
+    regions:['United States','Canada'], asks:['list','tests','chances'], instr:true
+  };
+
+  var S = {f:{}, subjects:[{}], activities:[{}], regions:[], asks:['list','tests','chances'], instr:true};
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(raw){ var p = JSON.parse(raw); if(p && typeof p==='object'){ for(var k in p){ S[k]=p[k]; } } }
+  }catch(e){}
+  if(!S.f) S.f={};
+  if(!S.subjects || !S.subjects.length) S.subjects=[{}];
+  if(!S.activities || !S.activities.length) S.activities=[{}];
+
+  function h(tag, attrs){
+    var e=document.createElement(tag);
+    attrs=attrs||{};
+    for(var k in attrs){
+      var v=attrs[k];
+      if(k==='class') e.className=v;
+      else if(k==='text') e.textContent=v;
+      else if(k.slice(0,2)==='on') e.addEventListener(k.slice(2), v);
+      else e.setAttribute(k, v);
+    }
+    for(var i=2;i<arguments.length;i++){
+      var c=arguments[i];
+      if(c==null || c===false) continue;
+      if(Array.isArray(c)) c.forEach(function(x){ if(x!=null) e.append(x); });
+      else e.append(c);
+    }
+    return e;
+  }
+
+  function fieldEl(def){
+    var id='f-'+def.k, ctl, extra=null;
+    if(def.t==='area'){ ctl=h('textarea',{id:id, rows:def.rows||3, placeholder:def.ph||''}); }
+    else if(def.t==='select'){
+      ctl=h('select',{id:id});
+      def.o.forEach(function(o){ ctl.append(h('option',{value:o, text:o||'Choose one'})); });
+    } else {
+      ctl=h('input',{id:id, type:'text', placeholder:def.ph||'', autocomplete:'off'});
+      if(def.list){
+        ctl.setAttribute('list', id+'-dl');
+        extra=h('datalist',{id:id+'-dl'}, def.list.map(function(o){ return h('option',{value:o}); }));
+      }
+    }
+    ctl.value=S.f[def.k]||'';
+    var ev = def.t==='select' ? 'change' : 'input';
+    ctl.addEventListener(ev, function(){ S.f[def.k]=ctl.value; update(); });
+    return h('div',{class:'fld'+(def.full?' full':'')},
+      h('label',{for:id}, def.l, def.opt ? h('span',{class:'opt', text:' (optional)'}) : null),
+      ctl, extra);
+  }
+
+  function rowsEl(cfg){
+    var box=h('div',{class:'rows'});
+    function render(){
+      box.replaceChildren();
+      S[cfg.name].forEach(function(row,i){
+        var r=h('div',{class:'row'});
+        cfg.cols.forEach(function(c){
+          var id=cfg.name+'-'+i+'-'+c.k;
+          var ctl = c.area ? h('textarea',{id:id, rows:2, placeholder:c.ph||''}) : h('input',{id:id, type:'text', placeholder:c.ph||'', autocomplete:'off'});
+          ctl.value=row[c.k]||'';
+          ctl.addEventListener('input', function(){ row[c.k]=ctl.value; update(); });
+          r.append(h('div',{class:'fld '+(c.cls||'')}, h('label',{for:id, text:c.l}), ctl));
+        });
+        r.append(h('button',{type:'button', class:'ghost', text:'Remove', 'aria-label':'Remove '+cfg.title.toLowerCase()+' row '+(i+1), onclick:function(){
+          S[cfg.name].splice(i,1);
+          if(!S[cfg.name].length) S[cfg.name].push({});
+          render(); update();
+        }}));
+        box.append(r);
+      });
+    }
+    render();
+    var add=h('button',{type:'button', class:'add', text:'+ '+cfg.add, onclick:function(){ S[cfg.name].push({}); render(); update(); }});
+    return h('div',{class:'fld full'}, h('label',{text:cfg.title}), box, add);
+  }
+
+  function chipsEl(){
+    var wrap=h('div',{class:'chips', role:'group', 'aria-label':'Where you would study'});
+    REGIONS.forEach(function(r,i){
+      var id='region-'+i;
+      var cb=h('input',{type:'checkbox', id:id});
+      cb.checked = S.regions.indexOf(r)>-1;
+      cb.addEventListener('change', function(){
+        var at=S.regions.indexOf(r);
+        if(cb.checked && at<0) S.regions.push(r);
+        if(!cb.checked && at>-1) S.regions.splice(at,1);
+        update();
+      });
+      wrap.append(h('label',{class:'chip', for:id}, cb, h('span',{text:r})));
+    });
+    return h('div',{class:'fld full'}, h('label',{text:'Where you would study'}), wrap);
+  }
+
+  function asksEl(){
+    var box=h('div',{class:'checks'});
+    ASKS.forEach(function(a){
+      var id='ask-'+a[0];
+      var cb=h('input',{type:'checkbox', id:id});
+      cb.checked = S.asks.indexOf(a[0])>-1;
+      cb.addEventListener('change', function(){
+        var at=S.asks.indexOf(a[0]);
+        if(cb.checked && at<0) S.asks.push(a[0]);
+        if(!cb.checked && at>-1) S.asks.splice(at,1);
+        update();
+      });
+      box.append(h('label',{class:'check', for:id}, cb, h('span',{text:a[1]})));
+    });
+    var q=h('textarea',{id:'f-q', rows:3, placeholder:'e.g. Is Waterloo better than Toronto for getting into trading firms?'});
+    q.value=S.f.q||'';
+    q.addEventListener('input', function(){ S.f.q=q.value; update(); });
+    return h('section',{class:'card'},
+      h('div',null, h('h2',{text:'What you want from the AI'}), h('p',{class:'note', text:'Tick what you need. These become the request at the end of your brief.'})),
+      box,
+      h('div',{class:'fld'}, h('label',{for:'f-q', text:'Your own question'}, h('span',{class:'opt', text:' (optional)'})), q),
+      h('button',{type:'button', class:'ghost clear', id:'clearBtn', text:'Clear everything', onclick:clearAll}));
+  }
+
+  var clearTimer=null;
+  function clearAll(){
+    var b=document.getElementById('clearBtn');
+    if(b.dataset.armed!=='1'){
+      b.dataset.armed='1'; b.textContent='Click again to erase your answers';
+      clearTimer=setTimeout(function(){ b.dataset.armed='0'; b.textContent='Clear everything'; }, 4000);
+      return;
+    }
+    clearTimeout(clearTimer);
+    S={f:{}, subjects:[{}], activities:[{}], regions:[], asks:['list','tests','chances'], instr:true};
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    buildForm(); update();
+  }
+
+  function buildForm(){
+    var form=document.getElementById('form');
+    form.replaceChildren();
+    SECTIONS.forEach(function(sec){
+      var kids=[];
+      if(sec.fields) kids.push(h('div',{class:'fields'}, sec.fields.map(fieldEl)));
+      if(sec.rows) kids.push(h('div',{class:'fields'}, rowsEl(sec.rows)));
+      if(sec.after) kids.push(h('div',{class:'fields'}, sec.after.map(fieldEl)));
+      if(sec.chips) kids.push(h('div',{class:'fields'}, chipsEl()));
+      form.append(h('section',{class:'card', id:'sec-'+sec.id},
+        h('div',null, h('h2',{text:sec.title}), h('p',{class:'note', text:sec.note})), kids));
+    });
+    form.append(asksEl());
+    document.getElementById('instrBox').checked = S.instr!==false;
+  }
+
+  function clean(v){ return String(v==null?'':v).replace(/\s*\n+\s*/g,' ').trim(); }
+  function ln(label,v){ v=clean(v); return v ? '- '+label+': '+v : ''; }
+
+  function keyChecks(st){
+    var f=st.f, out=[];
+    SECTIONS.forEach(function(sec){
+      (sec.fields||[]).concat(sec.after||[]).forEach(function(d){
+        if(d.key) out.push([d.key, !!clean(f[d.k])]);
+      });
+      if(sec.rows && sec.rows.key){
+        var rs=st[sec.rows.name]||[];
+        out.push([sec.rows.key, rs.some(function(r){ return clean(r[sec.rows.cols[0].k]); })]);
+      }
+      if(sec.chips) out.push(['Where you would study', (st.regions||[]).length>0]);
+    });
+    return out;
+  }
+
+  function hasData(st){
+    var f=st.f||{};
+    for(var k in f){ if(clean(f[k])) return true; }
+    var rows=(st.subjects||[]).concat(st.activities||[]);
+    for(var i=0;i<rows.length;i++){ for(var j in rows[i]){ if(clean(rows[i][j])) return true; } }
+    return (st.regions||[]).length>0;
+  }
+
+  function build(st){
+    var f=st.f||{}, out=[];
+    function sec(title, lines){
+      lines=lines.filter(Boolean);
+      if(lines.length) out.push('## '+title+'\n'+lines.join('\n'));
+    }
+    var subj=(st.subjects||[]).filter(function(r){ return clean(r.s)||clean(r.lv)||clean(r.r); }).map(function(r){
+      return '  - '+(clean(r.s)||'Subject')+(clean(r.lv)?' ('+clean(r.lv)+')':'')+(clean(r.r)?': '+clean(r.r):'');
+    });
+    var acts=(st.activities||[]).filter(function(r){ return clean(r.n)||clean(r.imp); }).map(function(r){
+      var meta=[clean(r.role),clean(r.yrs)].filter(Boolean).join('; ');
+      return '- '+(clean(r.n)||'Activity')+(meta?' ('+meta+')':'')+(clean(r.imp)?': '+clean(r.imp):'');
+    });
+    sec('About me',[ln('Name',f.name),ln('Lives in',f.country),ln('Citizenship',f.citizen),ln('Intended start',f.entry),ln('Intended major',f.major),ln('Career goal',f.goal)]);
+    sec('Academics',[ln('Curriculum or exam',f.system),ln('Overall result',f.overall),ln('Grading context',f.scale),
+      subj.length?'- Subjects and results:\n'+subj.join('\n'):'',ln('Highest math or science content',f.math),ln('Grade trend',f.trend)]);
+    var sat=[clean(f.sat),clean(f.satScore)].filter(Boolean).join(', ');
+    var eng=[clean(f.eng),clean(f.engScore)].filter(Boolean).join(', ');
+    sec('Tests and English',[ln('SAT/ACT',sat),ln('English test',eng),ln('Language of instruction and waivers',f.moi),ln('AP, IB or A-level',f.ap),ln('Other tests',f.otherTests)]);
+    sec('Activities and achievements',[].concat(acts,[ln('Awards',f.awards),ln('Projects, research or work',f.projects)]));
+    sec('Recommenders and essays',[ln('Recommenders',f.recs),ln('Essay material',f.essay)]);
+    sec('Money',[ln('Yearly budget (USD, all costs)',f.budget),ln('Aid need',f.aid),ln('Merit scholarships',f.merit),ln('Open to community college then transfer',f.transfer)]);
+    sec('Preferences and progress',[ln('Where I would study',(st.regions||[]).join(', ')),ln('What matters most',f.matters),ln('Deal-breakers',f.dealbreak),ln('Schools already on my list',f.considering),ln('Applications and deadlines',f.status)]);
+    sec('Context',[ln('Context',f.context)]);
+
+    var missing=keyChecks(st).filter(function(c){ return !c[1]; }).map(function(c){ return '- '+c[0]; });
+    if(missing.length) out.push('## Not provided yet\n'+missing.join('\n'));
+
+    var labels=ASKS.filter(function(a){ return (st.asks||[]).indexOf(a[0])>-1; }).map(function(a){ return '- '+a[1]; });
+    if(clean(f.q)) labels.push('- My question: '+clean(f.q));
+    if(labels.length) out.push('## What I want from you\n'+labels.join('\n'));
+
+    var body='# My application profile\n\n'+out.join('\n\n');
+    return (st.instr!==false ? INSTR+'\n\n' : '')+body;
+  }
+
+  var outEl=document.getElementById('out');
+  function update(){
+    try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
+    var real=hasData(S);
+    var st = real ? S : EXAMPLE;
+    st.instr = S.instr;
+    outEl.textContent = build(st);
+    document.getElementById('exTag').hidden = real;
+    var checks=keyChecks(S), done=checks.filter(function(c){ return c[1]; }).length;
+    document.getElementById('meterText').textContent = done+' of '+checks.length+' key details filled in';
+    document.getElementById('meterBar').style.width = Math.round(done/checks.length*100)+'%';
+    document.getElementById('barCount').textContent = done+' of '+checks.length+' key details';
+  }
+
+  function selectOut(){
+    var r=document.createRange(); r.selectNodeContents(outEl);
+    var s=window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+  function flash(btn,msg){
+    var old=btn.dataset.label || btn.textContent;
+    btn.dataset.label=old; btn.textContent=msg;
+    setTimeout(function(){ btn.textContent=old; }, 1800);
+  }
+  function copy(btn){
+    var text=outEl.textContent;
+    var done=function(){ flash(btn,'Copied'); };
+    var fail=function(){ selectOut(); flash(btn,'Selected. Press Ctrl/Cmd+C'); };
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done, fail); }
+      else fail();
+    }catch(e){ fail(); }
+  }
+  document.getElementById('copyBtn').addEventListener('click', function(e){ copy(e.currentTarget); });
+  document.getElementById('copyBtn2').addEventListener('click', function(e){ copy(e.currentTarget); });
+  document.getElementById('instrBox').addEventListener('change', function(e){ S.instr=e.target.checked; update(); });
+
+  buildForm();
+  update();
+})();
+</script>
+</body>
+</html>
